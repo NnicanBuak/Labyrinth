@@ -1,0 +1,9 @@
+name=Playdate Game Template
+author=Ivan Sergeev (ivansergeev@gmail.com)
+description=template for developers
+bundleID=store.playdate.template
+version=0.1
+buildNumber=1
+imagePath=assets/system
+pdxversion=20000
+buildtime=738587172
