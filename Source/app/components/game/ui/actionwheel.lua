@@ -79,11 +79,14 @@ function Actionwheel:nextItem()
   self:draw()
 end
 
-function Actionwheel:previousItem(actions)
+function Actionwheel:previousItem()
   print('Actionwheel:previousItem')
 
-  self.actionwheel = actions
   self:draw()
+end
+
+function Actionwheel:action()
+  print('Actionwheel:action')
 end
 
 function Actionwheel.leaving(instance)
