@@ -3,8 +3,6 @@ import 'app/utils/table'
 
 local gfx <const> = playdate.graphics
 local sprite <const> = gfx.sprite
-local columnFont12 <const> = gfx.font.new('assets/fonts/Column/Column/12/')
-local columnFont18 <const> = gfx.font.new('assets/fonts/Column/Column/18/')
 
 class('Actionwheel').extends()
 
@@ -51,14 +49,13 @@ function Actionwheel:draw()
   gfx.lockFocus(self.ui.img)
 
   gfx.setColor(gfx.kColorBlack)
+  gfx.setFont(gfx.font.new('assets/fonts/Columns'))
   for index, action in pairs(self.actionwheel) do
     if index > 3 then
       break
     elseif index == 1 then
-      gfx.setFont(columnFont18)
       gfx.drawText(action, 100, 60)
     else
-      gfx.setFont(columnFont12)
       gfx.drawText(action, 100, 60 - 20 * index)
     end
   end
