@@ -1,7 +1,7 @@
 import 'app/utils/event-emitter'
 import 'app/components/game/gameplay/gameplay'
 import 'app/components/game/gameover/gameover'
-import 'app/components/game/ui/score-bar'
+import 'app/components/game/ui/actionwheel'
 
 local gfx <const> = playdate.graphics
 local sprite <const> = gfx.sprite
@@ -10,7 +10,6 @@ local pushInputHandlers <const> = playdate.inputHandlers.push
 class('GameScene').extends()
 
 function GameScene:init(state)
-
 	-- self.gameSettings = GameSettings()
 	-- self.settings = self.gameSettings.data
 
@@ -19,22 +18,43 @@ function GameScene:init(state)
 
 	self.inputHandlers = {
 		gameplay = {
-			AButtonUp =  function()
-				self.gameplay:check()
+			leftButtonDown = function()
+				self.gameplay:moveLeft()
+			end,
+			rightButtonDown = function()
+				self.gameplay:moveRight()
+			end,
+			upButtonDown = function()
+				self.gameplay:moveUp()
+			end,
+			downButtonDown = function()
+				self.gameplay:moveDown()
+			end,
+			cranked = function(change, acceleratedChange)
+				if change > 15 then
+					self.actionwheel:nextItem()
+				elseif change < 15 then
+					self.actionwheel:previousItem()
+				end
+			end,
+			BButtonDown = function()
+			end,
+			AButtonDown = function()
+				self.gameplay:action()
 			end,
 		},
 		gameover = {
-			BButtonUp =  function()
+			BButtonDown = function()
 			end,
-			AButtonUp =  function()
+			AButtonDown = function()
 			end,
 		},
 		gameover_revealed = {
-			BButtonUp =  function()
+			BButtonDown = function()
 				-- back to the main screen
 				self.state.manager:switch('main')
 			end,
-			AButtonUp =  function()
+			AButtonDown = function()
 				self.restart(self)
 			end,
 		},
@@ -43,17 +63,13 @@ function GameScene:init(state)
 	self:initInputHandlers('gameplay')
 	self:draw()
 
-	print('	scoreBar', self.scoreBar)
-
-	self.scoreBar = ScoreBar(self)
+	self.actionwheel = Actionwheel(self)
 	self.gameplay = Gameplay(self)
 end
-
 
 function GameScene:initInputHandlers(state)
 	pushInputHandlers(self.inputHandlers[state], true)
 end
-
 
 function GameScene:draw()
 	print('GameScene:draw')
@@ -65,9 +81,8 @@ function GameScene:draw()
 	ui.img = gfx.image.new(400, 240, gfx.kColorClear)
 
 	gfx.lockFocus(ui.img)
-		gfx.setColor(gfx.kColorBlack)
-		gfx.drawText('game scene', 159, 15)
-		gfx.drawText('press A when the circle is inside', 80, 205)
+	gfx.setColor(gfx.kColorBlack)
+	gfx.drawText('game scene', 159, 15)
 	gfx.unlockFocus()
 
 	ui:setImage(ui.img)
@@ -75,7 +90,6 @@ function GameScene:draw()
 	ui:moveTo(0, 0)
 	ui:add()
 end
-
 
 function GameScene:gameover()
 	self:initInputHandlers('gameover')
@@ -85,7 +99,7 @@ end
 function GameScene.restart(instance)
 	instance.ui:remove()
 	instance.gameplay.leaving(instance.gameplay)
-	instance.scoreBar.leaving(instance.scoreBar)
+	instance.actionwheel.leaving(instance.actionwheel)
 	instance.gameover:obscuring()
 	-- self:init(self.state)
 	instance = nil
@@ -96,8 +110,8 @@ end
 
 function GameScene.leaving(instance)
 	instance.gameplay.leaving(instance.gameplay)
-	instance.scoreBar.leaving(instance.scoreBar)
 	instance.gameover.leaving(instance.gameover)
+	instance.actionwheel.leaving(instance.actionwheel)
 	instance.ui:remove()
 	instance = nil
 end

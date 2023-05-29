@@ -5,18 +5,23 @@ import 'CoreLibs/frameTimer'
 
 import 'app/app'
 
--- Global
+-- Global variables
+playdate.screenWidth = 400
+playdate.screenHeight = 240
+playdate.screenWidthCenterAlignDevice = 228
 
 -- FRAME = 0
 APP = App()
 
 
--- Local
+-- Local variables
 
 local gfx <const> = playdate.graphics
 local gfxSpriteUpdate <const> = gfx.sprite.update
 local updateTimers <const> = playdate.timer.updateTimers
 local updateFrameTimers <const> = playdate.frameTimer.updateTimers
+
+-- DEBUG
 -- local drawFPS <const> = playdate.drawFPS
 -- local printCurrentFrame <const> = function ()
 -- 	FRAME += 1
@@ -24,9 +29,12 @@ local updateFrameTimers <const> = playdate.frameTimer.updateTimers
 -- 	print('['..FRAME..']')
 -- end
 
+-- APP
 APP:start()
 
+-- PLAYDATE
 function playdate.update()
+	-- DEBUG
 	-- printCurrentFrame()
 	-- drawFPS(382, 226)
 
