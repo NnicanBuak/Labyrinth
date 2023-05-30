@@ -15,7 +15,6 @@ import 'app/states/game/over'
 class('App').extends()
 
 function App:init()
-
 	print('App:init')
 
 	self.appStorage = nil
@@ -23,7 +22,7 @@ function App:init()
 
 
 	-- First way
-	self.stateManager = StateManager(InitState, MainState, GamePlayState, GamePauseState,GameOverState)
+	self.stateManager = StateManager(InitState, MainState, GamePlayState, GamePauseState, GameOverState)
 
 
 	-- Second way
@@ -35,10 +34,10 @@ function App:init()
 		self.stateManager:push(GameplayPauseState:init(self.stateManager))
 		self.stateManager:push(GameoverState:init(self.stateManager))
 		self.stateManager:push(AchievementsState:init(self.stateManager))
-	]]--
+	]]
+	--
 
 	print('	app state manager:', self.stateManager)
-
 end
 
 function App:start()

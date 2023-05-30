@@ -2,6 +2,7 @@ import 'app/utils/event-emitter'
 import 'app/components/game/gameplay/gameplay'
 import 'app/components/game/gameover/gameover'
 import 'app/components/game/ui/actionwheel'
+import 'CoreLibs/crank'
 
 local gfx <const> = playdate.graphics
 local sprite <const> = gfx.sprite
@@ -30,10 +31,21 @@ function GameScene:init(state)
 			downButtonDown = function()
 				self.gameplay:moveDown()
 			end,
+			crankDocked = function()
+				self.actionwheel:close()
+			end,
+			crankUndocked = function()
+				self.actionwheel:open()
+			end,
 			cranked = function(change, acceleratedChange)
-				if change > 15 then
+				-- not intuitive code, lol
+				local crankedDirection <const> = playdate.getCrankTicks(6)
+				local crankPosition <const> = playdate.getCrankPosition()
+				if crankedDirection == 1 then
+					print(crankPosition)
 					self.actionwheel:nextItem()
-				elseif change < 15 then
+				elseif crankedDirection == -1 then
+					print(crankPosition)
 					self.actionwheel:previousItem()
 				end
 			end,

@@ -4,6 +4,10 @@ import 'app/utils/table'
 local gfx <const> = playdate.graphics
 local sprite <const> = gfx.sprite
 
+local RainsFont1x <const> = gfx.font.new('assets/fonts/Rains/font-rains-1x')
+local RainsFont2x <const> = gfx.font.new('assets/fonts/Rains/font-rains-2x')
+local RainsFont3x <const> = gfx.font.new('assets/fonts/Rains/font-rains-3x')
+
 class('Actionwheel').extends()
 
 function Actionwheel:init(game)
@@ -13,12 +17,14 @@ function Actionwheel:init(game)
   self.eventEmitter = EventEmitter:init()
 
   self.onUpdateHandler = function(actions)
-    self:open(actions)
+    self:update(actions)
   end
 
   self.eventEmitter:on('actionwheel.update', self.onUpdateHandler)
 
   self.actionwheel = { 'Attack 1', 'Attack 2', 'Attack 3' }
+
+  self.action = 'Attack 1'
 
   self:initUi()
   self:draw()
@@ -49,18 +55,28 @@ function Actionwheel:draw()
   gfx.lockFocus(self.ui.img)
 
   gfx.setColor(gfx.kColorBlack)
-  gfx.setFont(gfx.font.new('assets/fonts/Columns'))
+  gfx.setFont()
   for index, action in pairs(self.actionwheel) do
     if index > 3 then
       break
     elseif index == 1 then
-      gfx.drawText(action, 100, 60)
-    else
-      gfx.drawText(action, 100, 60 - 20 * index)
+      gfx.setFont(RainsFont2x)
+      gfx.drawTextAligned(action, 120, 60, kTextAlignment.center)
+    elseif index == 2 then
+      gfx.setFont(RainsFont1x)
+      gfx.drawTextAligned(action, 120, 80 - 20 * index, kTextAlignment.center)
     end
   end
 
   gfx.unlockFocus()
+end
+
+function Actionwheel:clear()
+  print('Actionwheel:clear')
+  print('	ui', self.ui)
+  print('	img', self.ui.img)
+
+  self.ui.img:clear(gfx.kColorClear)
 end
 
 function Actionwheel:update(actions)
@@ -68,6 +84,18 @@ function Actionwheel:update(actions)
 
   self.actionwheel = actions
   self:draw()
+end
+
+function Actionwheel:open()
+  print('Actionwheel:open')
+
+  self:draw()
+end
+
+function Actionwheel:close()
+  print('Actionwheel:close')
+
+  self:clear()
 end
 
 function Actionwheel:nextItem()
@@ -82,8 +110,8 @@ function Actionwheel:previousItem()
   self:draw()
 end
 
-function Actionwheel:action()
-  print('Actionwheel:action')
+function Actionwheel:getAction()
+  print('Actionwheel:getAction')
 end
 
 function Actionwheel.leaving(instance)

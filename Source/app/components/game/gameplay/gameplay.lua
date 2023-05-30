@@ -16,8 +16,24 @@ function Gameplay:init(game)
 	self.eventEmitter:on('game.over', self.onGameoverHandler)
 end
 
-function Gameplay:check()
-	print('Gameplay:check')
+function Gameplay:moveLeft()
+	print('Gameplay:moveLeft')
+end
+
+function Gameplay:moveRight()
+	print('Gameplay:moveRight')
+end
+
+function Gameplay:moveUp()
+	print('Gameplay:moveUp')
+end
+
+function Gameplay:moveDown()
+	print('Gameplay:moveDown')
+end
+
+function Gameplay:action()
+	print('Gameplay:action')
 end
 
 function Gameplay:gameover()
