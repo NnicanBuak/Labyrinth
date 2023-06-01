@@ -1,7 +1,8 @@
-name=Playdate Game Template
-author=Ivan Sergeev (ivansergeev@gmail.com)
-description=template for developers
-bundleID=store.playdate.template
+name=Labyrinth
+author=Nnican
+description=The game
+bundleID=com.nnican.labyrinth
 version=0.1
 buildNumber=1
-imagePath=assets/system
+imagePath=/app/assets/system
+launchSoundPath=/app/assets/sounds/launch

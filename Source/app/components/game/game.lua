@@ -32,26 +32,21 @@ function GameScene:init(state)
 				self.gameplay:moveDown()
 			end,
 			crankDocked = function()
-				self.actionwheel:close()
+				self.gameplay.actionwheel:close()
 			end,
 			crankUndocked = function()
-				self.actionwheel:open()
+				self.gameplay.actionwheel:open()
 			end,
 			cranked = function(change, acceleratedChange)
 				-- not intuitive code, lol
 				local crankedDirection <const> = playdate.getCrankTicks(6)
-				local crankPosition <const> = playdate.getCrankPosition()
 				if crankedDirection == 1 then
-					print(crankPosition)
-					self.actionwheel:nextItem()
+					self.gameplay.actionwheel:nextItem()
 				elseif crankedDirection == -1 then
-					print(crankPosition)
-					self.actionwheel:previousItem()
+					self.gameplay.actionwheel:previousItem()
 				end
 			end,
 			BButtonDown = function()
-			end,
-			AButtonDown = function()
 				self.gameplay:action()
 			end,
 		},
@@ -75,7 +70,6 @@ function GameScene:init(state)
 	self:initInputHandlers('gameplay')
 	self:draw()
 
-	self.actionwheel = Actionwheel(self)
 	self.gameplay = Gameplay(self)
 end
 

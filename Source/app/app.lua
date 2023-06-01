@@ -11,14 +11,17 @@ import 'app/states/game/pause'
 import 'app/states/game/over'
 
 
-
 class('App').extends()
 
 function App:init()
 	print('App:init')
 
-	self.appStorage = nil
-	-- self.storage = {}
+	self.uiSoundSample = playdate.sound.sample.new('assets/sounds/click')
+	self.fontRains1x   = playdate.graphics.font.new('assets/fonts/Rains/font-rains-1x')
+	self.fontRains2x   = playdate.graphics.font.new('assets/fonts/Rains/font-rains-2x')
+	self.fontRains3x   = playdate.graphics.font.new('assets/fonts/Rains/font-rains-3x')
+
+	self.storage       = {}
 
 
 	-- First way

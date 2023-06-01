@@ -7,6 +7,7 @@ class('Gameplay').extends()
 
 function Gameplay:init(game)
 	self.game = game
+	self.actionwheel = Actionwheel(self)
 	self.eventEmitter = EventEmitter:init()
 
 	self.onGameoverHandler = function()
@@ -34,6 +35,7 @@ end
 
 function Gameplay:action()
 	print('Gameplay:action')
+	local action <const> = self.actionwheel.actions[1]
 end
 
 function Gameplay:gameover()

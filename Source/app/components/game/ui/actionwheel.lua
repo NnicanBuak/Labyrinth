@@ -4,27 +4,14 @@ import 'app/utils/table'
 local gfx <const> = playdate.graphics
 local sprite <const> = gfx.sprite
 
-local RainsFont1x <const> = gfx.font.new('assets/fonts/Rains/font-rains-1x')
-local RainsFont2x <const> = gfx.font.new('assets/fonts/Rains/font-rains-2x')
-local RainsFont3x <const> = gfx.font.new('assets/fonts/Rains/font-rains-3x')
-
 class('Actionwheel').extends()
 
-function Actionwheel:init(game)
+function Actionwheel:init(gameplay)
   print('Actionwheel:init', self)
 
-  self.game = game
-  self.eventEmitter = EventEmitter:init()
+  self.gameplay = gameplay
 
-  self.onUpdateHandler = function(actions)
-    self:update(actions)
-  end
-
-  self.eventEmitter:on('actionwheel.update', self.onUpdateHandler)
-
-  self.actionwheel = { 'Attack 1', 'Attack 2', 'Attack 3' }
-
-  self.action = 'Attack 1'
+  self.actions = { 'Attack 1', 'Attack 2', 'Attack 3' }
 
   self:initUi()
   self:draw()
@@ -45,26 +32,38 @@ function Actionwheel:initUi()
   ui:add()
 end
 
+function Actionwheel:update(actions)
+  print('Actionwheel:open')
+
+  self.actions = actions
+  self:draw()
+  if not (APP.uiSoundSample == nil) then
+    APP.uiSoundSample:play()
+  end
+end
+
 function Actionwheel:draw()
   print('Actionwheel:draw')
   print('	ui', self.ui)
   print('	img', self.ui.img)
 
-  self.ui.img:clear(gfx.kColorClear)
+  self:clear()
 
   gfx.lockFocus(self.ui.img)
 
   gfx.setColor(gfx.kColorBlack)
   gfx.setFont()
-  for index, action in pairs(self.actionwheel) do
-    if index > 3 then
+  for index, action in pairs(self.actions) do
+    if index > 2 then
+      gfx.setFont(APP.fontRains2x)
+      gfx.drawTextAligned(self.actions[#self.actions], 120, 85, kTextAlignment.center)
       break
     elseif index == 1 then
-      gfx.setFont(RainsFont2x)
+      gfx.setFont(APP.RainsFont2x)
       gfx.drawTextAligned(action, 120, 60, kTextAlignment.center)
     elseif index == 2 then
-      gfx.setFont(RainsFont1x)
-      gfx.drawTextAligned(action, 120, 80 - 20 * index, kTextAlignment.center)
+      gfx.setFont(APP.fontRains1x)
+      gfx.drawTextAligned(action, 120, 42, kTextAlignment.center)
     end
   end
 
@@ -77,13 +76,6 @@ function Actionwheel:clear()
   print('	img', self.ui.img)
 
   self.ui.img:clear(gfx.kColorClear)
-end
-
-function Actionwheel:update(actions)
-  print('Actionwheel:open')
-
-  self.actionwheel = actions
-  self:draw()
 end
 
 function Actionwheel:open()
@@ -101,13 +93,19 @@ end
 function Actionwheel:nextItem()
   print('Actionwheel:nextItem')
 
-  self:draw()
+  local actionsInstance = self.actions
+  local firstItem = table.remove(actionsInstance, 1)
+  table.insert(actionsInstance, firstItem)
+  self:update(actionsInstance)
 end
 
 function Actionwheel:previousItem()
   print('Actionwheel:previousItem')
 
-  self:draw()
+  local actionsInstance = self.actions
+  local lastItem = table.remove(actionsInstance)
+  table.insert(actionsInstance, 1, lastItem)
+  self:update(actionsInstance)
 end
 
 function Actionwheel:getAction()
