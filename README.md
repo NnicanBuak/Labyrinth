@@ -1,1 +1,1 @@
-# Playdate Game Template
+# Playdate Game
